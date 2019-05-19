@@ -1,0 +1,35 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.cmct.kettle.core.mapper.KTransDao">
+
+    <!--获取转换任务列表-->
+    <select id="getListByTrans" resultType="com.cmct.kettle.core.model.vo.TransVo">
+       SELECT
+       tr.trans_id,
+       tr.trans_name,
+       tr.trans_description,
+       tr.trans_type,
+       tr.trans_path,
+       tr.trans_repository_id,
+       tr.trans_quartz,
+       tr.trans_record,
+       tr.trans_log_level,
+       tr.trans_status,
+       tr.add_time,
+       tr.add_user,
+       tr.edit_time,
+       tr.edit_user,
+       tr.del_flag,
+       qu.quartz_cron,
+       tm.monitor_success,
+       tm.monitor_fail,
+       (select max(ktr.stop_time) from k_trans_record ktr where ktr.record_trans=tr.trans_id) last_ex_time
+       FROM
+       k_trans AS tr
+       LEFT JOIN k_quartz AS qu ON tr.trans_quartz = qu.quartz_id
+       left join k_trans_monitor tm on tm.monitor_trans=tr.trans_id
+        where tr.add_user=#{addUser}
+        and tr.del_flag=#{delFlag}
+    </select>
+</mapper>
