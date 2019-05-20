@@ -6,9 +6,17 @@
 springboot+tk.mybatis+kettle+layui
 
 #### 使用说明
-
-1.暂未发布
-
+开发项目需要配置maven镜像
+```xml
+<mirror>
+        <id>pentaho</id>
+        <mirrorOf>*</mirrorOf>
+        <name>Nexus pentaho</name>
+        <url>http://nexus.pentaho.org/content/groups/omni/</url>
+</mirror> 
+```
+## 下步工作
+1.监控quartz容器
 
 
 
