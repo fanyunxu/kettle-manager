@@ -1,11 +1,15 @@
 package io.fanyun.kettle.web.quartz;
 
+import io.fanyun.kettle.core.model.vo.QuartzVo;
 import io.fanyun.kettle.web.utils.ApplicationContextProviderUtil;
 import io.fanyun.kettle.web.utils.DateTime;
 import org.quartz.*;
+import org.quartz.impl.matchers.GroupMatcher;
 import org.quartz.impl.matchers.KeyMatcher;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 @Component
@@ -172,8 +176,25 @@ public class QuartzManager {
         } catch (Exception e) {  
             throw new RuntimeException(e);  
         }  
-    }  
+    }
 
+    public  List<QuartzVo> getAllJobs(){
+        List<QuartzVo> quartzVos=new ArrayList<>();
+        try {
+            for (String groupName : sched.getJobGroupNames()) {
+                for (JobKey jobKey : sched.getJobKeys(GroupMatcher.jobGroupEquals(groupName))) {
+                    String jobName = jobKey.getName();
+                    String jobGroup = jobKey.getGroup();
+                    List<Trigger> triggers = (List<Trigger>) sched.getTriggersOfJob(jobKey);
+                    QuartzVo quartzVo=new QuartzVo(jobName,jobGroup,triggers.get(0).getNextFireTime());
+                    quartzVos.add(quartzVo);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return quartzVos;
+    }
     /** 
      * @Description:启动所有定时任务 
      */  

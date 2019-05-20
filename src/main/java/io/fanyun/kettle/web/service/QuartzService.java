@@ -7,6 +7,8 @@ import io.fanyun.kettle.core.model.po.KQuartz;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import io.fanyun.kettle.core.model.po.KUser;
+import io.fanyun.kettle.core.model.vo.QuartzVo;
+import io.fanyun.kettle.web.quartz.QuartzManager;
 import org.pentaho.di.core.exception.KettleException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,7 +24,8 @@ public class QuartzService {
 	
 	@Autowired
 	private KQuartzDao kQuartzDao;
-	
+	@Autowired
+	private QuartzManager quartzManager;
 	/**
 	 * @Title getList
 	 * @Description 获取定时策略列表
@@ -97,5 +100,13 @@ public class QuartzService {
 		kQuartz.setDelFlag(0);
 		kQuartzDao.updateByPrimaryKeySelective(kQuartz);
 
+	}
+
+	/**
+	 * 获取所有定时
+	 * @return
+	 */
+	public List<QuartzVo> getQuartzContainerList(){
+		return quartzManager.getAllJobs();
 	}
 }
