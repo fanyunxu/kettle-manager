@@ -70,7 +70,22 @@
                                 <a class="J_menuItem" href="view/trans/monitor/listUI.shtml">&nbsp;转换监控</a>
                             </li>
                         </ul>
-                    </li> 
+                    </li>
+                    <li>
+                        <a href="javascript:void(0)">
+                            <i class="fa fa-desktop" aria-hidden="true"></i>
+                            <span class="nav-label">Quartz管理</span>
+                            <span class="fa arrow"></span>
+                        </a>
+                        <ul class="nav nav-second-level">
+                            <li>
+                                <a class="J_menuItem" href="view/quartz/execute/listUI.shtml">&nbsp;执行策略</a>
+                            </li>
+                            <li>
+                                <a class="J_menuItem" href="view/quartz/container/listUI.shtml">&nbsp;容器监控</a>
+                            </li>
+                        </ul>
+                    </li>
                     <li id="isAdmin">
                     	<a href="javascript:void(0)">
                             <i class="fa fa-users" aria-hidden="true"></i>
@@ -125,7 +140,7 @@
                 <iframe class="J_iframe" name="iframe0" width="100%" height="100%" src="view/mainUI.shtml" frameborder="0" seamless></iframe>
             </div>
             <div class="footer">
-                <div class="pull-right">&copy; 2017</div>
+                <div class="pull-right">&copy; 2019</div>
             </div>
         </div>
         <!--右侧部分结束-->

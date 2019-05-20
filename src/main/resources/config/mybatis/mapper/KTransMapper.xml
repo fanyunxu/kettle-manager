@@ -1,10 +1,10 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.cmct.kettle.core.mapper.KTransDao">
+<mapper namespace="io.fanyun.kettle.core.mapper.KTransDao">
 
     <!--获取转换任务列表-->
-    <select id="getListByTrans" resultType="com.cmct.kettle.core.model.vo.TransVo">
+    <select id="getListByTrans" resultType="io.fanyun.kettle.core.model.vo.TransVo">
        SELECT
        tr.trans_id,
        tr.trans_name,
