@@ -47,4 +47,8 @@ public class QuartzController {
 		quartzService.delete(quartzId,kUser);
 		return ResultDto.success();
 	}
+	@GetMapping("container/allQuartz.shtml")
+	public String getContainerAllQuartz(){
+		return JsonUtils.objectToJson(quartzService.getQuartzContainerList());
+	}
 }

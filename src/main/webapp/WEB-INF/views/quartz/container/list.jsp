@@ -18,7 +18,7 @@
     <div class="wrapper wrapper-content animated fadeInRight">
         <div class="ibox float-e-margins">
             <div class="ibox-title">
-                <h5>转换列表</h5>
+                <h5>任务列表</h5>
                 <div class="ibox-tools">
                     <a class="collapse-link">
                         <i class="fa fa-chevron-up"></i>
@@ -29,37 +29,22 @@
                 </div>
             </div>
             <div class="ibox-content">
-            	<div class="col-sm-6 float-left">	
-	            	<a href="view/trans/rAddUI.shtml" class="btn btn-w-m btn-info" type="button">
-	            		<i class="fa fa-plus" aria-hidden="true"></i>&nbsp;新增资源库转换
-            		</a>
-            		<a href="view/trans/fAddUI.shtml" class="btn btn-w-m btn-info" type="button">
-	            		<i class="fa fa-plus" aria-hidden="true"></i>&nbsp;新增文件转换
-            		</a>
-            	</div>
-            	<div class="right">	
+            	<div class="right">
 	            	<button onclick="search()" class="btn btn-w-m btn-info" type="button">
 	            		<i class="fa fa-plus" aria-hidden="true"></i>&nbsp;刷新列表
             		</button>
             	</div>
-                <table id="transList" data-toggle="table"
-					data-url="trans/getList.shtml"
+                <table id="containerQuartzList" data-toggle="table"
+					data-url="quartz/container/allQuartz.shtml"
 					data-query-params=queryParams data-query-params-type="limit"
 					data-pagination="true"
 					data-side-pagination="server" data-pagination-loop="false">
 					<thead>
 						<tr>
-							<th data-field="transId">转换编号</th>
-							<th data-field="transName" data-formatter="transNameFormatter">转换名称</th>
-							<th data-field="quartzCron">cron</th>
-                            <th data-field="editTime">转换更新时间</th>
-							<th data-field="monitorSuccess">成功次数</th>
-							<th data-field="monitorFail">失败次数</th>
-							<th data-field="lastExTime">最近执行时间</th>
-							<th data-field="transStatus" data-formatter="transStatusFormatter">转换状态</th>
-							<th data-field="action" data-formatter="actionFormatter"
-								data-events="actionEvents">操作</th>
-						</tr>
+							<th data-field="jobName">jobName</th>
+							<th data-field="jobGroup" >jobGroup</th>
+							<th data-field="nextFireTime" >下次执行时间</th>
+							<th data-field="executing" data-formatter="transStatusFormatter">状态</th>
 					</thead>
 				</table>
             </div>
@@ -86,120 +71,15 @@
     		}
     	}   
     	function transStatusFormatter(value, row, index){
-    		if (value == "1"){
+    		if (value === 0){
     			return "正在运行";
-    		}else if (value == "2"){
+    		}else if (value === 1){
     			return "已停止";
     		}else {
     			return "未定义";
     		}
     	}
-	    function actionFormatter(value, row, index) {
-	    	if (row.transStatus == "1"){
-	    		return ['<a class="btn btn-primary btn-xs" id="stop" type="button"><i class="fa fa-stop" aria-hidden="true"></i>&nbsp;停止</a>',
-		    			'&nbsp;&nbsp;',
-		    			'<a class="btn btn-primary btn-xs" id="edit" type="button"><i class="fa fa-paste" aria-hidden="true"></i>&nbsp;编辑</a>',
-		    			'&nbsp;&nbsp;',
-		    			'<a class="btn btn-primary btn-xs" id="delete" type="button"><i class="fa fa-trash" aria-hidden="true"></i>&nbsp;删除</a>'].join('');	
-	    	}else if (row.transStatus == "2"){
-	    		return ['<a class="btn btn-primary btn-xs" id="start" type="button"><i class="fa fa-play" aria-hidden="true"></i>&nbsp;启动</a>',
-	    			'&nbsp;&nbsp;',
-	    			'<a class="btn btn-primary btn-xs" id="edit" type="button"><i class="fa fa-paste" aria-hidden="true"></i>&nbsp;编辑</a>',
-	    			'&nbsp;&nbsp;',
-	    			'<a class="btn btn-primary btn-xs" id="delete" type="button"><i class="fa fa-trash" aria-hidden="true"></i>&nbsp;删除</a>'].join('');	
-	    	}else {
-	    		return ['<a class="btn btn-primary btn-xs" id="edit" type="button"><i class="fa fa-paste" aria-hidden="true"></i>&nbsp;编辑</a>',
-	    			'&nbsp;&nbsp;',
-	    			'<a class="btn btn-primary btn-xs" id="delete" type="button"><i class="fa fa-trash" aria-hidden="true"></i>&nbsp;删除</a>'].join('');	
-	    	}
-	    };
-	    window.actionEvents = {	    		
-				'click #start' : function(e, value, row, index) {
-					layer.confirm('确定启动该转换？', {
-	    				  btn: ['确定', '取消'] 
-	    				},
-	    				function(index){
-	    				    layer.close(index);
-	    				    $.ajax({
-	    				        type: 'POST',
-	    				        async: true,
-	    				        url: 'trans/start.shtml',
-	    				        data: {
-	    				            "transId": row.transId          
-	    				        },
-	    				        success: function (data) {
-	    				        	location.replace(location.href); 				        	 
-	    				        },
-	    				        error: function () {
-	    				            alert("系统出现问题，请联系管理员");
-	    				        },
-	    				        dataType: 'json'
-	    				    });
-	    		  		}, 
-	    		  		function(){
-	    		  			layer.msg('取消操作');
-  		  				}
-  		  			);
-	    		},
-	    		'click #stop' : function(e, value, row, index) {
-	    			layer.confirm('确定停止该转换？', {
-	    				  btn: ['确定', '取消'] 
-	    				},
-	    				function(index){
-	    				    layer.close(index);
-	    				    $.ajax({
-	    				        type: 'POST',
-	    				        async: true,
-	    				        url: 'trans/stop.shtml',
-	    				        data: {
-	    				            "transId": row.transId          
-	    				        },
-	    				        success: function (data) {
-	    				        	location.replace(location.href); 				        	 
-	    				        },
-	    				        error: function () {
-	    				            alert("系统出现问题，请联系管理员");
-	    				        },
-	    				        dataType: 'json'
-	    				    });
-	    		  		}, 
-	    		  		function(){
-	    		  			layer.msg('取消操作');
-		  				}
-		  			);
-	    		},
-	    		'click #edit' : function(e, value, row, index) {
-	    			var transId = row.transId;
-	    			location.href = "view/trans/editUI.shtml?transId=" + transId;
-	    		},
-	    		'click #delete' : function(e, value, row, index) {
-	    			layer.confirm('确定删除该单位？', {
-	    				  btn: ['确定', '取消'] 
-	    				},
-	    				function(index){
-	    				    layer.close(index);
-	    				    $.ajax({
-	    				        type: 'POST',
-	    				        async: true,
-	    				        url: 'trans/delete.shtml',
-	    				        data: {
-	    				            "transId": row.transId          
-	    				        },
-	    				        success: function (data) {
-	    				        	location.replace(location.href); 				        	 
-	    				        },
-	    				        error: function () {
-	    				            alert("系统出现问题，请联系管理员");
-	    				        },
-	    				        dataType: 'json'
-	    				    });
-	    		  		}, 
-	    		  		function(){
-	    		  			layer.msg('取消操作');
-    		  			}
-    		  		);
-	    		},
-	    	};
+
 		    
 		    function queryParams(params) {
 		    	var temp = { limit: 10, offset: params.offset };
@@ -207,7 +87,7 @@
 		    };
 		    
 		    function search(){
-		    	$('#transList').bootstrapTable('refresh', "trans/getList.shtml");
+		    	$('#containerQuartzList').bootstrapTable('refresh', "quartz/container/allQuartz.shtml");
 		    }
     </script>
 </body>

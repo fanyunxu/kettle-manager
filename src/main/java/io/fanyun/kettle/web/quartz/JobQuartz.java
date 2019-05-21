@@ -38,11 +38,12 @@ public class JobQuartz implements Job {
 	private KJobRecordDao kJobRecordDao;
 	@Autowired
 	private KJobMonitorDao kJobMonitorDao;
+	@Override
 	public void execute(JobExecutionContext context) throws JobExecutionException {
 
 		JobDataMap jobDataMap = context.getJobDetail().getJobDataMap();
-		Object KRepositoryObject = jobDataMap.get(Constant.REPOSITORYOBJECT);
-		Object DbConnectionObject = jobDataMap.get(Constant.DBCONNECTIONOBJECT);
+		Object kRepositoryObject = jobDataMap.get(Constant.REPOSITORYOBJECT);
+		Object dbConnectionObject = jobDataMap.get(Constant.DBCONNECTIONOBJECT);
 		String jobName_str = context.getJobDetail().getKey().getName();
 		String [] names = jobName_str.split("@");
 		String jobId = String.valueOf(jobDataMap.get(Constant.TRANSID));
@@ -51,19 +52,20 @@ public class JobQuartz implements Job {
 		String userId = String.valueOf(jobDataMap.get(Constant.USERID));
 		String logLevel = String.valueOf(jobDataMap.get(Constant.LOGLEVEL));
 		String logFilePath = String.valueOf(jobDataMap.get(Constant.LOGFILEPATH));
-
-		if (null != DbConnectionObject && DbConnectionObject instanceof DBConnectionModel) {// 首先判断数据库连接对象是否正确
+		// 首先判断数据库连接对象是否正确
+		if (dbConnectionObject instanceof DBConnectionModel) {
 			// 判断作业类型
-			if (null != KRepositoryObject && KRepositoryObject instanceof KRepository) {// 证明该作业是从资源库中获取到的
+			// 证明该作业是从资源库中获取到的
+			if (kRepositoryObject instanceof KRepository) {
 				try {
-					runRepositoryJob(KRepositoryObject, DbConnectionObject, jobId, jobPath, jobName, userId, logLevel,
+					runRepositoryJob(kRepositoryObject, dbConnectionObject, jobId, jobPath, jobName, userId, logLevel,
 							logFilePath);
 				} catch (KettleException e) {
 					e.printStackTrace();
 				}
 			} else {
 				try {
-					runFileJob(DbConnectionObject, jobId, jobPath, jobName, userId, logLevel, logFilePath);
+					runFileJob(dbConnectionObject, jobId, jobPath, jobName, userId, logLevel, logFilePath);
 				} catch (KettleXMLException | KettleMissingPluginsException e) {
 					e.printStackTrace();
 				}

@@ -106,7 +106,9 @@ public class QuartzService {
 	 * 获取所有定时
 	 * @return
 	 */
-	public List<QuartzVo> getQuartzContainerList(){
-		return quartzManager.getAllJobs();
+	public BootTablePage getQuartzContainerList(){
+		List<QuartzVo> quartzVos=quartzManager.getAllJobs();
+		quartzVos=quartzVos==null?new ArrayList<>():quartzVos;
+		return  new BootTablePage(quartzVos.size(),quartzVos);
 	}
 }

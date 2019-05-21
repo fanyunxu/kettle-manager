@@ -23,35 +23,6 @@ public class RepositoryUtil {
 														= new HashMap<Integer, KettleDatabaseRepository>();
 	
 	
-	public static void main(String[] args) throws KettleException{
-	
-		KRepository kRepository = new KRepository();
-		kRepository.setRepositoryId(1);
-		kRepository.setRepositoryName("repository");
-		kRepository.setRepositoryUsername("admin");
-		kRepository.setRepositoryPassword("admin");
-		kRepository.setRepositoryType("MYSQL");
-		kRepository.setDatabaseAccess("Native");
-		kRepository.setDatabaseHost("localhost");
-		kRepository.setDatabasePort("3306");
-		kRepository.setDatabaseName("kettle");
-		kRepository.setDatabaseUsername("root");
-		kRepository.setDatabasePassword("123456");
-		
-		KettleEnvironment.init();
-		
-		KettleDatabaseRepository kettleDatabaseRepository = connectionRepository(kRepository);
-		
-		List<RepositoryTree> allRepositoryTreeList = new ArrayList<RepositoryTree>();
-		
-		List<RepositoryTree> repositoryTreeList = getAllDirectoryTreeList(kettleDatabaseRepository, "/", allRepositoryTreeList);
-
-		for (RepositoryTree repositoryTree : repositoryTreeList){
-			System.out.println(repositoryTree);
-		}
-	}
-	
-	
 	public static String[] getDataBaseAccess(){
 		String[] dataBaseAccess = DatabaseMeta.dbAccessTypeCode;
 		

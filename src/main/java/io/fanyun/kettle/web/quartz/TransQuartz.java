@@ -49,10 +49,11 @@ public class TransQuartz implements Job {
 		this.kTransMonitorDao = kTransMonitorDao;
 	}
 
+	@Override
 	public void execute(JobExecutionContext context) throws JobExecutionException {
 		JobDataMap transDataMap = context.getJobDetail().getJobDataMap();
-		Object KRepositoryObject = transDataMap.get(Constant.REPOSITORYOBJECT);
-		Object DbConnectionObject = transDataMap.get(Constant.DBCONNECTIONOBJECT);
+		Object kRepositoryObject = transDataMap.get(Constant.REPOSITORYOBJECT);
+		Object dbConnectionObject = transDataMap.get(Constant.DBCONNECTIONOBJECT);
 		String transId = String.valueOf(transDataMap.get(Constant.TRANSID));
 		String transPath = String.valueOf(transDataMap.get(Constant.TRANSPATH));
 		String transName = String.valueOf(transDataMap.get(Constant.TRANSNAME));
@@ -60,19 +61,19 @@ public class TransQuartz implements Job {
 		String logLevel = String.valueOf(transDataMap.get(Constant.LOGLEVEL));
 		String logFilePath = String.valueOf(transDataMap.get(Constant.LOGFILEPATH));
 		// 首先判断数据库连接对象是否正确
-		if (null != DbConnectionObject && DbConnectionObject instanceof DBConnectionModel) {
+		if (dbConnectionObject instanceof DBConnectionModel) {
 			// 判断转换类型
 			// 证明该转换是从资源库中获取到的
-			if (null != KRepositoryObject && KRepositoryObject instanceof KRepository) {
+			if (kRepositoryObject instanceof KRepository) {
 				try {
-					runRepositorytrans(KRepositoryObject, DbConnectionObject, transId, transPath, transName, userId,
+					runRepositorytrans(kRepositoryObject, dbConnectionObject, transId, transPath, transName, userId,
 							logLevel, logFilePath);
 				} catch (KettleException e) {
 					e.printStackTrace();
 				}
 			} else {
 				try {
-					runFiletrans(DbConnectionObject, transId, transPath, transName, userId, logLevel, logFilePath);
+					runFiletrans(dbConnectionObject, transId, transPath, transName, userId, logLevel, logFilePath);
 				} catch (KettleXMLException | KettleMissingPluginsException e) {
 					e.printStackTrace();
 				}
@@ -83,9 +84,9 @@ public class TransQuartz implements Job {
 	/**
 	 * @Title runRepositorytrans
 	 * @Description 运行资源库中的转换
-	 * @param KRepositoryObject
+	 * @param kRepositoryObject
 	 *            数据库连接对象
-	 * @param KRepositoryObject
+	 * @param dbConnectionObject
 	 *            资源库对象
 	 * @param transId
 	 *            转换ID
@@ -102,10 +103,10 @@ public class TransQuartz implements Job {
 	 * @throws KettleException
 	 * @return void
 	 */
-	private void runRepositorytrans(Object KRepositoryObject, Object DbConnectionObject, String transId,
+	private void runRepositorytrans(Object kRepositoryObject, Object dbConnectionObject, String transId,
 			String transPath, String transName, String userId, String logLevel, String logFilePath)
 			throws KettleException {
-		KRepository kRepository = (KRepository) KRepositoryObject;
+		KRepository kRepository = (KRepository) kRepositoryObject;
 		Integer repositoryId = kRepository.getRepositoryId();
 		KettleDatabaseRepository kettleDatabaseRepository = null;
 		if (RepositoryUtil.KettleDatabaseRepositoryCatch.containsKey(repositoryId)) {
@@ -158,7 +159,7 @@ public class TransQuartz implements Job {
 						kTransRecord.setRecordStatus(recordStatus);
 						kTransRecord.setStartTime(transStartDate);
 						kTransRecord.setStopTime(transStopDate);
-						writeToDBAndFile(DbConnectionObject, kTransRecord, logText);
+						writeToDBAndFile(dbConnectionObject, kTransRecord, logText);
 					} catch (IOException | SQLException e) {
 						e.printStackTrace();
 					}

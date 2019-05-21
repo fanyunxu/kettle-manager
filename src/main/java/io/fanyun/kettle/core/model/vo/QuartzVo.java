@@ -6,11 +6,15 @@ public class QuartzVo {
     private String jobName;
     private String jobGroup;
     private Date nextFireTime;
-
-    public QuartzVo(String jobName, String jobGroup, Date nextFireTime) {
+    /**
+     * 0 未执行 1运行
+     */
+    private Integer executing;
+    public QuartzVo(String jobName, String jobGroup, Date nextFireTime,Integer executing) {
         this.jobName = jobName;
         this.jobGroup = jobGroup;
         this.nextFireTime = nextFireTime;
+        this.executing=executing;
     }
 
     public String getJobName() {
@@ -35,5 +39,13 @@ public class QuartzVo {
 
     public void setNextFireTime(Date nextFireTime) {
         this.nextFireTime = nextFireTime;
+    }
+
+    public Integer getExecuting() {
+        return executing;
+    }
+
+    public void setExecuting(Integer executing) {
+        this.executing = executing;
     }
 }

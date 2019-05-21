@@ -73,7 +73,7 @@
                     </li>
                     <li>
                         <a href="javascript:void(0)">
-                            <i class="fa fa-desktop" aria-hidden="true"></i>
+                            <i class="fa fa-space-shuttle" aria-hidden="true"></i>
                             <span class="nav-label">Quartz管理</span>
                             <span class="fa arrow"></span>
                         </a>

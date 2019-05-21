@@ -1,5 +1,6 @@
 package io.fanyun.kettle.web.quartz;
 
+import io.fanyun.kettle.common.toolkit.ExecuteStatus;
 import io.fanyun.kettle.core.model.vo.QuartzVo;
 import io.fanyun.kettle.web.utils.ApplicationContextProviderUtil;
 import io.fanyun.kettle.web.utils.DateTime;
@@ -180,13 +181,15 @@ public class QuartzManager {
 
     public  List<QuartzVo> getAllJobs(){
         List<QuartzVo> quartzVos=new ArrayList<>();
+        List<String> executing=getAllExecutingJob();
         try {
             for (String groupName : sched.getJobGroupNames()) {
                 for (JobKey jobKey : sched.getJobKeys(GroupMatcher.jobGroupEquals(groupName))) {
                     String jobName = jobKey.getName();
                     String jobGroup = jobKey.getGroup();
                     List<Trigger> triggers = (List<Trigger>) sched.getTriggersOfJob(jobKey);
-                    QuartzVo quartzVo=new QuartzVo(jobName,jobGroup,triggers.get(0).getNextFireTime());
+                    Integer executeStatus=executing.contains(jobName)?ExecuteStatus.YES.ordinal():ExecuteStatus.NO.ordinal();
+                    QuartzVo quartzVo=new QuartzVo(jobName,jobGroup,triggers.get(0).getNextFireTime(),executeStatus);
                     quartzVos.add(quartzVo);
                 }
             }
@@ -194,6 +197,23 @@ public class QuartzManager {
             e.printStackTrace();
         }
         return quartzVos;
+    }
+
+    /**
+     * 获取所有正在执行的任务
+     * @return
+     */
+    public List<String> getAllExecutingJob(){
+        List<String> res=new ArrayList<>();
+        try {
+            List<JobExecutionContext>  jobExecutionContexts=sched.getCurrentlyExecutingJobs();
+            for (JobExecutionContext jobExecutionContext : jobExecutionContexts) {
+                res.add(jobExecutionContext.getTrigger().getJobKey().getName()) ;
+            }
+        } catch (SchedulerException e) {
+            e.printStackTrace();
+        }
+        return res;
     }
     /** 
      * @Description:启动所有定时任务 

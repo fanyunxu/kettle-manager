@@ -231,8 +231,8 @@ public class TransService {
 		}
 		kTransDao.updateByPrimaryKeySelective(kTrans);
 		//停止之前的定时策略任务 启动新策略任务
-		if(kQuartz!=null&&!customerQuarz.equals(kQuartz.getQuartzCron())&&1==kTrans.getTransStatus()){
-			stop(kTrans.getTransId());
+		if(1==tmpKTrans.getTransStatus()){
+			removeQuartzByTrans(tmpKTrans);
 			start(kTrans.getTransId());
 		}
 	}
@@ -310,7 +310,18 @@ public class TransService {
 		kTrans.setTransStatus(2);
 		kTransDao.updateByPrimaryKeySelective(kTrans);
 	}
-	
+
+	/**
+	 * 根据转换移除任务
+	 * @param kTrans
+	 */
+	private void removeQuartzByTrans(KTrans kTrans){
+		// 获取Quartz执行的基础信息
+		Map<String, String> quartzBasic = getQuartzBasic(kTrans);
+		quartzManager.removeJob(quartzBasic.get("jobName"), quartzBasic.get("jobGroupName"),
+				quartzBasic.get("triggerName"), quartzBasic.get("triggerGroupName"));
+	}
+
 	/**
 	 * @Title getQuartzBasic
 	 * @Description 获取任务调度的基础信息
@@ -358,7 +369,8 @@ public class TransService {
 		// 资源库对象
 		Integer transRepositoryId = kTrans.getTransRepositoryId();
 		KRepository kRepository = null;
-		if (transRepositoryId != null){// 这里是判断是否为资源库中的转换还是文件类型的转换的关键点
+		// 这里是判断是否为资源库中的转换还是文件类型的转换的关键点
+		if (transRepositoryId != null){
 			kRepository = KRepositoryDao.selectByPrimaryKey(transRepositoryId);
 		}
 		// 资源库对象
