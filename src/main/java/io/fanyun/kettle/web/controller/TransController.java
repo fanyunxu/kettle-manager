@@ -77,9 +77,12 @@ public class TransController {
 		KUser kUser = (KUser) request.getSession().getAttribute(Constant.SESSION_ID);
 		transService.update(kTrans, customerQuarz, kUser.getuId());
 		return ResultDto.success();
-
 	}
-	
+	@RequestMapping("delete.shtml")
+	public String delete(Integer transId){
+		transService.delete(transId);
+		return ResultDto.success();
+	}
 	@RequestMapping("start.shtml")
 	public String start(Integer transId){
 		transService.start(transId);
