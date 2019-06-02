@@ -1,4 +1,6 @@
 # kettle-manager
+本项目是fork https://github.com/zllkyo/kettle-manager
+
 
 
 #### 软件架构
@@ -16,7 +18,7 @@ springboot+tk.mybatis+kettle+layui
 </mirror> 
 ```
 ## 下步工作
-1.监控quartz容器
+待定
 
 
 
