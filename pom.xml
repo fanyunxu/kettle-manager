@@ -12,6 +12,12 @@
     <artifactId>kettle-manager</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>kettle-manager</name>
+    <repositories>
+        <repository>
+            <id>pentaho-releases</id>
+            <url>http://repository.pentaho.org/artifactory/repo/</url>
+        </repository>
+    </repositories>
     <description>Demo project for Spring Boot</description>
     <properties>
         <docker.image.prefix>fanyunxu</docker.image.prefix>
