@@ -2,9 +2,9 @@
 	<!-- 应用程序启动 运行的日志 -->
 	<appender name="INFO_FILE"
 		class="ch.qos.logback.core.rolling.RollingFileAppender">
-		<file>/biis/logs/app/check/info.log</file>
+		<file>/tmp/kettle-manager/info.log</file>
 		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-			<fileNamePattern>/biis/logs/app/archive/check/info.%d{yyyy-MM-dd}.log</fileNamePattern>
+			<fileNamePattern>/tmp/kettle-manager/info.%d{yyyy-MM-dd}.log</fileNamePattern>
 			<maxHistory>3</maxHistory>
 		</rollingPolicy>
 		<encoder charset="UTF-8">
@@ -20,9 +20,9 @@
 
 	<appender name="ERROR_FILE"
 		class="ch.qos.logback.core.rolling.RollingFileAppender">
-		<file>/biis/logs/app/check/error.log</file>
+		<file>/tmp/kettle-manager/rerror.log</file>
 		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-			<fileNamePattern>/biis/logs/app/archive/check/error.%d{yyyy-MM-dd}.log
+			<fileNamePattern>/tmp/kettle-manager/error.%d{yyyy-MM-dd}.log
 			</fileNamePattern>
 			<maxHistory>1</maxHistory>
 		</rollingPolicy>

@@ -3,7 +3,6 @@ package io.fanyun.kettle.common.toolkit;
 import org.pentaho.di.core.Const;
 import org.pentaho.di.core.logging.LogLevel;
 
-import java.io.FileInputStream;
 import java.util.Properties;
 
 /**
@@ -107,9 +106,7 @@ public class Constant extends Const {
 	public static Properties readProperties() {
 		Properties p = new Properties();
 		try {
-			p.load(new FileInputStream(Constant.class.getResource("/")
-					.getPath().replace("%20", " ")
-					+ UKETTLE));
+			p.load(Constant.class.getClassLoader().getResourceAsStream(UKETTLE));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
