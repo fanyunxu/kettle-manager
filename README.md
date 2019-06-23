@@ -17,6 +17,8 @@ springboot+tk.mybatis+kettle+layui
         <url>http://nexus.pentaho.org/content/groups/omni/</url>
 </mirror> 
 ```
+
+/Users/xufanyun/dev/docker/kettle-manager
 ## 下步工作
 待定
 
